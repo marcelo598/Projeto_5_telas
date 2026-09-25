@@ -1,0 +1,8 @@
+br\com\projeto\dao\UsuarioDAO.class
+br\com\projeto\model\Usuario.class
+br\com\projeto\api\ProdutoApiServlet.class
+br\com\projeto\config\Database.class
+br\com\projeto\dao\ProdutoDAO.class
+br\com\projeto\model\Produto.class
+br\com\projeto\servlet\LoginServlet.class
+br\com\projeto\servlet\CadastroServlet.class

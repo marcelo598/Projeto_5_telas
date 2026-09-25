@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos - Projeto 5 Telas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="nav">
+
+        <h1>Projeto 5 Telas</h1>
+
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="login.html">Sair</a>
+        </nav>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <h2>Produtos</h2>
+
+    <p>Confira os produtos disponíveis.</p>
+
+    <div id="listaProdutos" class="produtos">
+
+        <p>Carregando produtos...</p>
+
+    </div>
+
+</main>
+
+<script>
+
+    fetch("/Projeto5Telas/api/produtos")
+
+        .then(response => response.json())
+
+        .then(produtos => {
+
+            const lista = document.getElementById("listaProdutos");
+
+            lista.innerHTML = "";
+
+            produtos.forEach(produto => {
+
+                const card = document.createElement("div");
+
+                card.className = "card";
+
+                card.innerHTML = `
+                    <h3>${produto.nome}</h3>
+
+                    <p>${produto.descricao}</p>
+
+                    <p>
+                        <strong>
+                            R$ ${Number(produto.preco)
+                                .toFixed(2)
+                                .replace(".", ",")}
+                        </strong>
+                    </p>
+
+                    <a class="button-link"
+                       href="detalhes.html?id=${produto.id}">
+                        Ver detalhes
+                    </a>
+                `;
+
+                lista.appendChild(card);
+
+            });
+
+        })
+
+        .catch(error => {
+
+            document.getElementById("listaProdutos").innerHTML =
+                "<p>Erro ao carregar os produtos.</p>";
+
+            console.error(error);
+
+        });
+
+</script>
+
+</body>
+</html>

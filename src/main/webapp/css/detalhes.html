@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detalhes - Projeto 5 Telas</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="nav">
+
+        <h1>Projeto 5 Telas</h1>
+
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="login.html">Sair</a>
+        </nav>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <a href="produtos.html">← Voltar para produtos</a>
+
+    <div id="detalhes" class="card">
+
+        <h2>Detalhes do produto</h2>
+
+        <p>Carregando...</p>
+
+    </div>
+
+</main>
+
+<script>
+
+    const parametros = new URLSearchParams(window.location.search);
+
+    const id = parametros.get("id");
+
+    if (id) {
+
+        fetch("/Projeto5Telas/api/produtos?id=" + id)
+
+            .then(response => response.json())
+
+            .then(produto => {
+
+                document.getElementById("detalhes").innerHTML = `
+
+                    <h2>${produto.nome}</h2>
+
+                    <p>
+                        ${produto.descricao}
+                    </p>
+
+                    <p>
+                        <strong>
+                            R$ ${Number(produto.preco)
+                                .toFixed(2)
+                                .replace(".", ",")}
+                        </strong>
+                    </p>
+
+                `;
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("detalhes").innerHTML =
+                    "<h2>Erro ao carregar produto.</h2>";
+
+                console.error(error);
+
+            });
+
+    }
+
+</script>
+
+</body>
+</html>
