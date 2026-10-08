@@ -2,7 +2,7 @@ package br.com.projeto.dao;
 
 import br.com.projeto.config.Database;
 import br.com.projeto.model.Usuario;
-
+import org.mindrot.jbcrypt.BCrypt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,17 +12,23 @@ public class UsuarioDAO {
 
     public boolean cadastrar(Usuario usuario) {
 
-        String sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
+        String sql = """
+                INSERT INTO usuario
+                (login, senha,perfil) VALUES(???)
+                """;
+        String senhaHash = BCrypt.hashpw(usuario.getSenha(),
+                BCrypt.gensalt(12));
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conexao = Database.getConnection();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            System.out.println("Conectado ao banco!");
-            System.out.println("Tentando cadastrar: " + usuario.getEmail());
 
-            stmt.setString(1, usuario.getNome());
-            stmt.setString(2, usuario.getEmail());
-            stmt.setString(3, usuario.getSenha());
+            stmt.setInt
+                    (1, usuario.getId());
+            stmt.setString(2, usuario.getLogin());
+            stmt.setString(3, senhaHash); // Ou usuario.getSenha() se não estiver usando hash
+            stmt.setBoolean(4, usuario.isStatus());
+            stmt.setString(5, usuario.getPerfil());
 
             int linhas = stmt.executeUpdate();
 
@@ -55,13 +61,13 @@ public class UsuarioDAO {
 
             if (rs.next()) {
 
-                Usuario usuario = new Usuario();
-
-                usuario.setId(rs.getInt("id"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
-
+                Usuario usuario = new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("login"),
+                        rs.getString("senha"),
+                        rs.getBoolean("status"),
+                        rs.getString("perfil")
+                );
                 return usuario;
             }
 

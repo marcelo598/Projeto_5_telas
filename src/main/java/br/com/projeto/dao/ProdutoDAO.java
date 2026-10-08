@@ -13,8 +13,8 @@ public class ProdutoDAO {
         List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT id, nome, descricao, preco FROM produtos ORDER BY id";
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
+        try (Connection conexao = Database.getConnection();
+             PreparedStatement stmt = conexao.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -36,8 +36,8 @@ public class ProdutoDAO {
     public Produto buscarPorId(int id) {
         String sql = "SELECT id, nome, descricao, preco FROM produtos WHERE id = ?";
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conexao = Database.getConnection();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
